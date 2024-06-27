@@ -4,14 +4,14 @@ import React from 'react';
 
 const ShoppingItem = ({ item, toggleItemBought, deleteItem }) => {
   return (
-    <li>
+    <li className="flex items-center justify-between px-2">
       <span
         style={{ textDecoration: item.bought ? 'line-through' : 'none' }}
-        onClick={toggleItemBought}
+        onClick={toggleItemBought} className='text-lg'
       >
         {item.name}
       </span>
-      <button onClick={deleteItem}>Delete</button>
+      <button onClick={deleteItem} className="px-4 mx-1 py-2 text-3xl float-end">×</button>
     </li>
   );
 };

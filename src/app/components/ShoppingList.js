@@ -32,10 +32,10 @@ const ShoppingList = () => {
   };
 
   return (
-    <div>
-      <h1>Shopping List</h1>
+    <div className="bg-white border-solid border-2 border-gray-300 p-5">
+      <h1 className='text-2xl pb-4'>Shopping List</h1>
       <AddItemForm addItem={addItem} />
-      <ul>
+      <ul className="w-full">
         {items.map((item, index) => (
           <ShoppingItem
             key={index}

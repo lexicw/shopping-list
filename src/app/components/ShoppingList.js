@@ -32,8 +32,8 @@ const ShoppingList = () => {
   };
 
   return (
-    <div className="bg-white border-solid border-2 border-gray-300 p-5">
-      <h1 className='text-2xl pb-4'>Shopping List</h1>
+    <div className="bg-white border-solid border-2 border-gray-300 pt-6 px-6 pb-8">
+      <h1 className='text-3xl pb-4 font-bold'>Shopping List</h1>
       <AddItemForm addItem={addItem} />
       <ul className="w-full">
         {items.map((item, index) => (

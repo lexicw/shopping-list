@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -10,6 +11,7 @@
 
 body {
   background-color: #f6f9fc;
+  font-family: 'Inter', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

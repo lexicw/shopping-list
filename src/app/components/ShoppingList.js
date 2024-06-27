@@ -32,8 +32,11 @@ const ShoppingList = () => {
   };
 
   return (
-    <div className="bg-white border-solid border-2 border-gray-300 pt-6 px-6 pb-8">
-      <h1 className='text-3xl pb-4 font-bold'>Shopping List</h1>
+    <div>
+            <h1 className='text-2xl font-bold bg-white w-fit py-3 px-6 border-r-4 border-indigo-500 inline-block'>Shopping List</h1>
+            <button className='inline-block px-6 pt-1 text-4xl'>+</button>
+    <div className="border-b-2 border-gray-300 pt-6 px-6 pb-6 bg-white">
+      
       <AddItemForm addItem={addItem} />
       <ul className="w-full">
         {items.map((item, index) => (
@@ -45,6 +48,7 @@ const ShoppingList = () => {
           />
         ))}
       </ul>
+    </div>
     </div>
   );
 };

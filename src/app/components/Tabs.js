@@ -37,14 +37,14 @@ const Tabs = ({ tabs, addList, updateListName }) => {
                 onChange={(e) => setEditValue(e.target.value)}
                 onBlur={() => handleBlur(index)}
                 onKeyPress={(e) => handleKeyPress(e, index)}
-                className={`tab-input text-xl lg:text-2xl font-bold py-3 px-6 w-fit box-border
+                className={`tab-input text-xl xl:text-2xl font-bold py-3 px-6 w-fit box-border
                   ${activeTab === index ? 'border-l-8 border-indigo-500' : 'border-l-8 border-gray-300 opacity-40'}`}
                 autoFocus
               />
               </div>
             ) : (
               <button
-                className={`tab-button text-xl lg:text-2xl font-bold bg-white w-fit py-3 px-6 
+                className={`tab-button text-xl xl:text-2xl font-bold bg-white w-fit py-3 px-6 
                   ${activeTab === index ? 'border-l-8 border-indigo-500' : 'border-l-8 border-gray-300 opacity-40'}`}
                 onClick={() => setActiveTab(index)}
                 onDoubleClick={() => handleDoubleClick(index, tab.label)}

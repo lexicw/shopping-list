@@ -32,8 +32,8 @@ const ShoppingList = () => {
   };
 
   return (
-    <div>
-            <h1 className='text-2xl font-bold bg-white w-fit py-3 px-6 border-r-4 border-indigo-500 inline-block'>Shopping List</h1>
+    <div className='container w-full lg:w-1/2 mx-auto mt-4'>
+            <h1 className='text-2xl font-bold bg-white w-fit py-3 px-6 border-l-8 border-indigo-500 inline-block'>Shopping List</h1>
             <button className='inline-block px-6 pt-1 text-4xl'>+</button>
     <div className="border-b-2 border-gray-300 pt-6 px-6 pb-6 bg-white">
       

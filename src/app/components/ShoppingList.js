@@ -1,54 +1,80 @@
+// src/components/ShoppingList.js
 "use client";
 
 import React, { useState, useEffect } from 'react';
 import AddItemForm from './AddItemForm';
 import ShoppingItem from './ShoppingItem';
+import Tabs from './Tabs';
 
 const ShoppingList = () => {
-  const [items, setItems] = useState([]);
+  const [lists, setLists] = useState([
+    { name: 'Shopping List', items: [] },
+  ]);
 
   useEffect(() => {
-    const storedItems = JSON.parse(localStorage.getItem('items')) || [];
-    setItems(storedItems);
+    const storedLists = JSON.parse(localStorage.getItem('lists')) || [
+      { name: 'Shopping List', items: [] },
+    ];
+    setLists(storedLists);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('items', JSON.stringify(items));
-  }, [items]);
+    localStorage.setItem('lists', JSON.stringify(lists));
+  }, [lists]);
 
-  const addItem = (item) => {
-    setItems([...items, { name: item, bought: false }]);
+  const addItem = (listIndex, item) => {
+    const newLists = [...lists];
+    newLists[listIndex].items.push({ name: item, bought: false });
+    setLists(newLists);
   };
 
-  const toggleItemBought = (index) => {
-    const newItems = [...items];
-    newItems[index].bought = !newItems[index].bought;
-    setItems(newItems);
+  const toggleItemBought = (listIndex, itemIndex) => {
+    const newLists = [...lists];
+    newLists[listIndex].items[itemIndex].bought = !newLists[listIndex].items[itemIndex].bought;
+    setLists(newLists);
   };
 
-  const deleteItem = (index) => {
-    const newItems = items.filter((_, i) => i !== index);
-    setItems(newItems);
+  const deleteItem = (listIndex, itemIndex) => {
+    const newLists = [...lists];
+    newLists[listIndex].items = newLists[listIndex].items.filter((_, i) => i !== itemIndex);
+    setLists(newLists);
   };
+
+  const addList = () => {
+    const newLists = [...lists, { name: `Shopping List ${lists.length + 1}`, items: [] }];
+    setLists(newLists);
+  };
+
+  const updateListName = (listIndex, newName) => {
+    const newLists = [...lists];
+    newLists[listIndex].name = newName;
+    setLists(newLists);
+  };
+
+  const tabs = lists.map((list, listIndex) => ({
+    label: list.name,
+    content: (
+      <div>
+        <div className="border-b-2 border-gray-300 pt-6 px-6 pb-6 bg-white">
+          <AddItemForm addItem={(item) => addItem(listIndex, item)} />
+          <ul className="w-full">
+            {list.items.map((item, itemIndex) => (
+              <ShoppingItem
+                key={itemIndex}
+                item={item}
+                toggleItemBought={() => toggleItemBought(listIndex, itemIndex)}
+                deleteItem={() => deleteItem(listIndex, itemIndex)}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
+    ),
+  }));
 
   return (
-    <div className='container w-full lg:w-1/2 mx-auto mt-4'>
-            <h1 className='text-2xl font-bold bg-white w-fit py-3 px-6 border-l-8 border-indigo-500 inline-block'>Shopping List</h1>
-            <button className='inline-block px-6 pt-1 text-4xl'>+</button>
-    <div className="border-b-2 border-gray-300 pt-6 px-6 pb-6 bg-white">
-      
-      <AddItemForm addItem={addItem} />
-      <ul className="w-full">
-        {items.map((item, index) => (
-          <ShoppingItem
-            key={index}
-            item={item}
-            toggleItemBought={() => toggleItemBought(index)}
-            deleteItem={() => deleteItem(index)}
-          />
-        ))}
-      </ul>
-    </div>
+    <div className='container w-full lg:w-1/2 mx-auto lg:mt-4'>
+      <Tabs tabs={tabs} addList={addList} updateListName={updateListName} />
     </div>
   );
 };

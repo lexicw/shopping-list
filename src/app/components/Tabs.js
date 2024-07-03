@@ -25,6 +25,19 @@ const Tabs = ({ tabs, addList, updateListName }) => {
     }
   };
 
+  const handleAddList = () => {
+    addList();
+    // Scroll to the end after a new list is added
+    setTimeout(() => {
+      if (tabButtonsRef.current) {
+        tabButtonsRef.current.scrollTo({
+          left: tabButtonsRef.current.scrollWidth,
+          behavior: "smooth"
+        });
+      }
+    }, 100);
+  };
+
   useEffect(() => {
     const ele = tabButtonsRef.current;
     ele.style.cursor = 'grab';
@@ -82,14 +95,14 @@ const Tabs = ({ tabs, addList, updateListName }) => {
                   onChange={(e) => setEditValue(e.target.value)}
                   onBlur={() => handleBlur(index)}
                   onKeyPress={(e) => handleKeyPress(e, index)}
-                  className={`tab-input text-xl xl:text-2xl font-bold py-3 px-6 w-fit box-border
+                  className={`tab-input text-xl font-bold py-3 px-6 w-fit box-border
                     ${activeTab === index ? 'border-l-8 border-indigo-500' : 'border-l-8 border-gray-300 opacity-40'}`}
                   autoFocus
                 />
               </div>
             ) : (
               <button
-                className={`tab-button text-xl xl:text-2xl font-bold bg-white w-fit py-3 px-6 whitespace-nowrap
+                className={`tab-button text-xl font-bold bg-white w-fit py-3 px-6 whitespace-nowrap
                   ${activeTab === index ? 'border-l-8 border-indigo-500' : 'border-l-8 border-gray-300 opacity-40'}`}
                 onClick={() => setActiveTab(index)}
                 onDoubleClick={() => handleDoubleClick(index, tab.label)}
@@ -100,8 +113,8 @@ const Tabs = ({ tabs, addList, updateListName }) => {
           </div>
         ))}
         <button
-          className='inline-block px-6 text-4xl'
-          onClick={addList}
+          className='inline-block px-4 text-4xl'
+          onClick={handleAddList}
         >
           +
         </button>

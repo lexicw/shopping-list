@@ -104,6 +104,14 @@ const Tabs = ({ tabs, addList, updateListName }) => {
     clearTimeout(tabButtonsRef.current.longPressTimeout);
   };
 
+  const handleTabClick = (index) => {
+    setActiveTab(index);
+    const tabButton = document.getElementById(`tab-button-${index}`);
+    if (tabButton) {
+      tabButton.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+    }
+  };
+
   return (
     <div>
       <div
@@ -127,9 +135,10 @@ const Tabs = ({ tabs, addList, updateListName }) => {
               </div>
             ) : (
               <button
+                id={`tab-button-${index}`}
                 className={`tab-button text-xl font-bold bg-white w-fit py-3 px-6 whitespace-nowrap
                   ${activeTab === index ? 'border-l-8 border-indigo-500' : 'border-l-8 border-gray-300 opacity-40'}`}
-                onClick={() => setActiveTab(index)}
+                onClick={() => handleTabClick(index)}
                 onDoubleClick={() => handleDoubleClick(index, tab.label)}
                 onTouchStart={() => handleTouchStart(index, tab.label)}
                 onTouchEnd={handleTouchEnd}

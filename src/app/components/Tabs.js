@@ -1,7 +1,13 @@
-// src/components/Tabs.js
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
+
+const isMobile = () => {
+  return (
+    typeof window !== 'undefined' &&
+    /Mobi|Android/i.test(window.navigator.userAgent)
+  );
+};
 
 const Tabs = ({ tabs, addList, updateListName }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -10,8 +16,10 @@ const Tabs = ({ tabs, addList, updateListName }) => {
   const tabButtonsRef = useRef(null);
 
   const handleDoubleClick = (index, label) => {
-    setEditIndex(index);
-    setEditValue(label);
+    if (index === activeTab) {
+      setEditIndex(index);
+      setEditValue(label);
+    }
   };
 
   const handleBlur = (index) => {
@@ -84,9 +92,24 @@ const Tabs = ({ tabs, addList, updateListName }) => {
     };
   }, [editIndex]);
 
+  const handleTouchStart = (index, label) => {
+    if (editIndex === null && index === activeTab) {
+      tabButtonsRef.current.longPressTimeout = setTimeout(() => {
+        handleDoubleClick(index, label);
+      }, 500);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    clearTimeout(tabButtonsRef.current.longPressTimeout);
+  };
+
   return (
     <div>
-      <div ref={tabButtonsRef} className="tab-buttons flex items-center overflow-x-scroll">
+      <div
+        ref={tabButtonsRef}
+        className={`tab-buttons flex items-center overflow-x-scroll ${editIndex !== null ? 'disable-scroll' : ''}`}
+      >
         {tabs.map((tab, index) => (
           <div key={index} className="">
             {editIndex === index ? (
@@ -108,6 +131,8 @@ const Tabs = ({ tabs, addList, updateListName }) => {
                   ${activeTab === index ? 'border-l-8 border-indigo-500' : 'border-l-8 border-gray-300 opacity-40'}`}
                 onClick={() => setActiveTab(index)}
                 onDoubleClick={() => handleDoubleClick(index, tab.label)}
+                onTouchStart={() => handleTouchStart(index, tab.label)}
+                onTouchEnd={handleTouchEnd}
               >
                 {tab.label}
               </button>

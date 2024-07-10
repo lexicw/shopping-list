@@ -23,6 +23,11 @@ body {
   touch-action: cross-slide-x;
 }
 
+.disable-scroll {
+  touch-action: none;
+  -ms-touch-action: none;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;

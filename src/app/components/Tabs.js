@@ -152,12 +152,13 @@ const Tabs = ({ tabs, addList, updateListName }) => {
             ) : (
               <button
                 id={`tab-button-${index}`}
-                className={`tab-button text-xl font-bold bg-white w-fit py-3 px-6 whitespace-nowrap
+                className={`tab-button text-xl font-bold w-fit py-3 px-6 whitespace-nowrap
                   ${
                     activeTab === index
                       ? "border-l-8 border-indigo-500"
                       : "border-l-8 border-gray-300 opacity-40"
                   }`}
+                style={{ backgroundColor: tab.color }}
                 onClick={() => handleTabClick(index)}
                 onDoubleClick={() => handleDoubleClick(index, tab.label)}
                 onTouchStart={() => handleTouchStart(index, tab.label)}

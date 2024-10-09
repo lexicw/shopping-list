@@ -7,11 +7,13 @@ import ShoppingItem from "./ShoppingItem";
 import Tabs from "./Tabs";
 
 const ShoppingList = () => {
-  const [lists, setLists] = useState([{ name: "Shopping List", items: [] }]);
+  const [lists, setLists] = useState([
+    { name: "Shopping List", items: [], color: "#FFFFFF" },
+  ]);
 
   useEffect(() => {
     const storedLists = JSON.parse(localStorage.getItem("lists")) || [
-      { name: "Shopping List", items: [] },
+      { name: "Shopping List", items: [], color: "#FFFFFF" },
     ];
     setLists(storedLists);
   }, []);
@@ -50,10 +52,22 @@ const ShoppingList = () => {
     }
   };
 
+  const changeListColor = (listIndex, newColor) => {
+    const updatedLists = lists.map((list, index) =>
+      index === listIndex ? { ...list, color: newColor } : list
+    );
+
+    setLists(updatedLists);
+  };
+
   const addList = () => {
     const newLists = [
       ...lists,
-      { name: `Shopping List ${lists.length + 1}`, items: [] },
+      {
+        name: `Shopping List ${lists.length + 1}`,
+        items: [],
+        color: "#FFFFFF",
+      },
     ];
     setLists(newLists);
   };
@@ -66,16 +80,32 @@ const ShoppingList = () => {
 
   const tabs = lists.map((list, listIndex) => ({
     label: list.name,
+    color: list.color,
     content: (
       <div>
-        <div className="border-b-2 border-gray-300 pt-6 px-6 pb-6 bg-white">
+        <div
+          className="border-b-2 border-gray-300 pt-6 px-6 pb-6"
+          style={{ backgroundColor: list.color }}
+        >
           <button
             type="submit"
-            className="bg-red-300 px-4 py-2 mb-3 text-md hover:bg-red-400 text-white rounded-md float-end"
+            className="bg-red-300 px-4 py-1 mb-3 text-2xl hover:bg-red-400 text-white rounded-md float-end"
             onClick={() => deleteList(listIndex)}
           >
-            Delete List
+            ×
           </button>
+          <div className="float-end flex items-center mx-3">
+            <label for="listColor" className="align-middle">
+              List Color:
+            </label>
+            <input
+              type="color"
+              value={list.color}
+              id="listColor"
+              className="p-1 h-10 w-14 bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"
+              onChange={(e) => changeListColor(listIndex, e.target.value)}
+            ></input>
+          </div>
           <AddItemForm addItem={(item) => addItem(listIndex, item)} />
           <ul className="w-full">
             {list.items.map((item, itemIndex) => (

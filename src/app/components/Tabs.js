@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 
 const isMobile = () => {
   return (
-    typeof window !== 'undefined' &&
+    typeof window !== "undefined" &&
     /Mobi|Android/i.test(window.navigator.userAgent)
   );
 };
@@ -12,8 +12,15 @@ const isMobile = () => {
 const Tabs = ({ tabs, addList, updateListName }) => {
   const [activeTab, setActiveTab] = useState(0);
   const [editIndex, setEditIndex] = useState(null);
-  const [editValue, setEditValue] = useState('');
+  const [editValue, setEditValue] = useState("");
   const tabButtonsRef = useRef(null);
+
+  // Effect to ensure activeTab is within valid bounds
+  useEffect(() => {
+    if (activeTab >= tabs.length) {
+      setActiveTab(tabs.length > 0 ? 0 : null); // Default to the first tab if there are tabs, otherwise null
+    }
+  }, [tabs, activeTab]);
 
   const handleDoubleClick = (index, label) => {
     if (index === activeTab) {
@@ -28,18 +35,21 @@ const Tabs = ({ tabs, addList, updateListName }) => {
   };
 
   const handleKeyPress = (e, index) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleBlur(index);
     }
   };
 
+  // Automatically set the active tab to the new list if no other lists exist
   const handleAddList = () => {
     addList();
+    setActiveTab(tabs.length); // Set activeTab to the new list's index (which is tabs.length before the addition)
+
     setTimeout(() => {
       if (tabButtonsRef.current) {
         tabButtonsRef.current.scrollTo({
           left: tabButtonsRef.current.scrollWidth,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       }
     }, 100);
@@ -49,8 +59,8 @@ const Tabs = ({ tabs, addList, updateListName }) => {
     const ele = tabButtonsRef.current;
 
     const mouseDownHandler = function (e) {
-      ele.style.cursor = 'grabbing';
-      ele.style.userSelect = 'none';
+      ele.style.cursor = "grabbing";
+      ele.style.userSelect = "none";
 
       const pos = {
         left: ele.scrollLeft,
@@ -68,27 +78,27 @@ const Tabs = ({ tabs, addList, updateListName }) => {
       };
 
       const mouseUpHandler = function () {
-        ele.style.cursor = 'grab';
-        ele.style.removeProperty('user-select');
+        ele.style.cursor = "grab";
+        ele.style.removeProperty("user-select");
 
-        document.removeEventListener('mousemove', mouseMoveHandler);
-        document.removeEventListener('mouseup', mouseUpHandler);
+        document.removeEventListener("mousemove", mouseMoveHandler);
+        document.removeEventListener("mouseup", mouseUpHandler);
       };
 
-      document.addEventListener('mousemove', mouseMoveHandler);
-      document.addEventListener('mouseup', mouseUpHandler);
+      document.addEventListener("mousemove", mouseMoveHandler);
+      document.addEventListener("mouseup", mouseUpHandler);
     };
 
     if (editIndex === null) {
-      ele.style.cursor = 'grab';
-      ele.addEventListener('mousedown', mouseDownHandler);
+      ele.style.cursor = "grab";
+      ele.addEventListener("mousedown", mouseDownHandler);
     } else {
-      ele.style.cursor = 'default';
-      ele.removeEventListener('mousedown', mouseDownHandler);
+      ele.style.cursor = "default";
+      ele.removeEventListener("mousedown", mouseDownHandler);
     }
 
     return () => {
-      ele.removeEventListener('mousedown', mouseDownHandler);
+      ele.removeEventListener("mousedown", mouseDownHandler);
     };
   }, [editIndex]);
 
@@ -108,7 +118,7 @@ const Tabs = ({ tabs, addList, updateListName }) => {
     setActiveTab(index);
     const tabButton = document.getElementById(`tab-button-${index}`);
     if (tabButton) {
-      tabButton.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+      tabButton.scrollIntoView({ behavior: "smooth", inline: "center" });
     }
   };
 
@@ -116,12 +126,14 @@ const Tabs = ({ tabs, addList, updateListName }) => {
     <div>
       <div
         ref={tabButtonsRef}
-        className={`tab-buttons flex items-center overflow-x-scroll ${editIndex !== null ? 'disable-scroll' : ''}`}
+        className={`tab-buttons flex items-center overflow-x-scroll ${
+          editIndex !== null ? "disable-scroll" : ""
+        }`}
       >
         {tabs.map((tab, index) => (
           <div key={index} className="">
             {editIndex === index ? (
-              <div className='bg-white'>
+              <div className="bg-white">
                 <input
                   type="text"
                   value={editValue}
@@ -129,7 +141,11 @@ const Tabs = ({ tabs, addList, updateListName }) => {
                   onBlur={() => handleBlur(index)}
                   onKeyPress={(e) => handleKeyPress(e, index)}
                   className={`tab-input text-xl font-bold py-3 px-6 w-fit box-border
-                    ${activeTab === index ? 'border-l-8 border-indigo-500' : 'border-l-8 border-gray-300 opacity-40'}`}
+                    ${
+                      activeTab === index
+                        ? "border-l-8 border-indigo-500"
+                        : "border-l-8 border-gray-300 opacity-40"
+                    }`}
                   autoFocus
                 />
               </div>
@@ -137,7 +153,11 @@ const Tabs = ({ tabs, addList, updateListName }) => {
               <button
                 id={`tab-button-${index}`}
                 className={`tab-button text-xl font-bold bg-white w-fit py-3 px-6 whitespace-nowrap
-                  ${activeTab === index ? 'border-l-8 border-indigo-500' : 'border-l-8 border-gray-300 opacity-40'}`}
+                  ${
+                    activeTab === index
+                      ? "border-l-8 border-indigo-500"
+                      : "border-l-8 border-gray-300 opacity-40"
+                  }`}
                 onClick={() => handleTabClick(index)}
                 onDoubleClick={() => handleDoubleClick(index, tab.label)}
                 onTouchStart={() => handleTouchStart(index, tab.label)}
@@ -148,16 +168,13 @@ const Tabs = ({ tabs, addList, updateListName }) => {
             )}
           </div>
         ))}
-        <button
-          className='inline-block px-4 text-4xl'
-          onClick={handleAddList}
-        >
+        <button className="inline-block px-4 text-4xl" onClick={handleAddList}>
           +
         </button>
       </div>
-      <div className="tab-content">
-        {tabs[activeTab].content}
-      </div>
+      {tabs.length > 0 && tabs[activeTab] && tabs[activeTab].content && (
+        <div className="tab-content">{tabs[activeTab].content}</div>
+      )}
     </div>
   );
 };

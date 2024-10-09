@@ -42,8 +42,12 @@ const ShoppingList = () => {
   };
 
   const deleteList = (listIndex) => {
-    const updatedLists = lists.filter((_, index) => index !== listIndex);
-    setLists(updatedLists);
+    if (confirm("Are you sure you want to delete this list?")) {
+      const updatedLists = lists.filter((_, index) => index !== listIndex);
+      setLists(updatedLists);
+    } else {
+      return;
+    }
   };
 
   const addList = () => {
@@ -68,7 +72,7 @@ const ShoppingList = () => {
           <button
             type="submit"
             className="bg-red-300 px-4 py-2 mb-3 text-md hover:bg-red-400 text-white rounded-md float-end"
-            onClick={(listIndex) => deleteList(listIndex)}
+            onClick={() => deleteList(listIndex)}
           >
             Delete List
           </button>

@@ -89,7 +89,7 @@ const ShoppingList = () => {
         >
           <button
             type="submit"
-            className="bg-red-300 px-4 py-1 mb-3 text-2xl hover:bg-red-400 text-white rounded-md float-end"
+            className="bg-red-300 w-10 px-2 py-1 mb-3 text-2xl hover:bg-red-400 text-white rounded-md float-end"
             onClick={() => deleteList(listIndex)}
           >
             ×
@@ -98,11 +98,12 @@ const ShoppingList = () => {
             <label for="listColor" className="align-middle">
               List Color:
             </label>
+            &nbsp;
             <input
               type="color"
               value={list.color}
               id="listColor"
-              className="p-1 h-10 w-14 bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700"
+              className="p-1 h-10 w-10 bg-white border border-gray-200 cursor-pointer rounded-lg disabled:opacity-50 disabled:pointer-events-none"
               onChange={(e) => changeListColor(listIndex, e.target.value)}
             ></input>
           </div>
